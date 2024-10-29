@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  user:
+    image: localhost:5000/user-service
+    ports:
+      - "8080:8080"
+    build:
+      context: user-service
+    restart: always
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+  mysql:
+    image: mysql:8
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+volumes:
+  mysql_data:
+networks:
+  local:
